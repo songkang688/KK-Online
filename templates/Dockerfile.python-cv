@@ -1,0 +1,49 @@
+# KK Online template — Python + OpenCV/MediaPipe on Railway/Render
+# Copy to deploy dir as "Dockerfile", then adjust COPY / CMD for Gradio vs WebUI.
+FROM python:3.11-slim-bookworm
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PORT=7860 \
+    GRADIO_SERVER_NAME=0.0.0.0
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libgl1 \
+    libglib2.0-0 \
+    libsm6 \
+    libxext6 \
+    libxrender1 \
+    libgomp1 \
+    libegl1 \
+    libgles2 \
+    libglvnd0 \
+    ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+RUN pip install --upgrade pip && pip install -r requirements.txt
+
+# --- Gradio (形态 A) 示例 ---
+COPY app.py .
+COPY highlight_removal ./highlight_removal
+COPY configs ./configs
+COPY models ./models
+COPY data ./data
+# COPY assets ./assets
+
+# --- 自定义 WebUI (形态 B) 时改为 ---
+# COPY web_server.py cli_process.py ./
+# COPY highlight_removal ./highlight_removal
+# COPY configs ./configs
+# COPY models ./models
+# COPY data ./data
+# COPY static ./static
+
+RUN mkdir -p /app/runtime_outputs
+
+EXPOSE 7860
+CMD ["python", "app.py"]
+# WebUI: CMD ["python", "web_server.py"]

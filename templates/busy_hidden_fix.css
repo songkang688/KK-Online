@@ -1,0 +1,6 @@
+/* KK Online — when .busy { display:grid } fights HTML [hidden], overlay never closes.
+   Pair with JS: el.setAttribute("hidden",""); wait for result image onload before hide. */
+.busy[hidden],
+.progress-track[hidden] {
+  display: none !important;
+}

@@ -1,0 +1,17 @@
+.venv/
+.git/
+.gradio/
+__pycache__/
+**/__pycache__/
+*.py[cod]
+runtime_outputs/*
+!runtime_outputs/.gitkeep
+demo_outputs/
+dist/
+*.log
+.DS_Store
+.env
+.env.*
+*.pem
+*.key
+**/secrets*
